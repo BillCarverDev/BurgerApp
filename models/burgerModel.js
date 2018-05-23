@@ -6,19 +6,21 @@ var burgers = {
 
       orm.selectAll("burgers", function(res) {
         cb(res);
+        // console.log(res);
       });
     },
 
-    add: function(vals, cb) {
+    create: function(cols, vals, cb) {
 
-      orm.insertOne("burgers", "burger_name", vals, function(res) {
+      orm.insertOne("burgers", cols, vals, function(res) {
         cb(res);
+        console.log(res);
       });
     },
 
-    update: function(value, condition, cb) {
-
-      orm.updateOne("burgers", "devoured", value, condition, function(res) {
+    update: function(id, cb) {
+      var condition = "id= " + id
+      orm.updateOne("burgers", {devoured:true}, condition, function(res) {
         cb(res);
       });
     }

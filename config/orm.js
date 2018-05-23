@@ -1,34 +1,79 @@
+// Here is the O.R.M. where you write functions that takes inputs and conditions
+// and turns them into database commands like SQL.
+
 var connection = require("./connection.js");
 
-const orm =
-{
-    selectAll: function(table, callback) {
+function printQuestionMarks(num) {
+  var arr = [];
 
-        let queryString = "SELECT * FROM burgers";
-        connection.query(queryString, function(err, dataResponse){
-        if(err) {
-            throw err;   
-        } 
-        callback(dataResponse);
-        });
-    },
-    insertOne: function(table, colName, val, callback) {
+  for (var i = 0; i < num; i++) {
+    arr.push("?");
+  }
 
-        let queryString = "INSERT INTO burgers(burger_name, devoured) VALUES (?, ?)";
-        connection.query(queryString, function(err, dataResponse){
-        // console.log(queryString);
-        if(err) throw err; callback(dataResponse);
-        });
-    },
-    updateOne: function(table, colName, val, callback) {
-        
-        let queryString = "UPDATE burgers SET devoured = true WHERE id = ?";
-        connection.query(queryString, function(err, dataResponse){
-        // console.log(queryString);
-        if(err) throw err; callback(dataResponse);
-        });
-    }
+  return arr.toString();
 }
 
+function objToSql(ob) {
+  // column1=value, column2=value2,...
+  var arr = [];
+
+  for (var key in ob) {
+    arr.push(key + "=" + ob[key]);
+  }
+
+  return arr.toString();
+}
+
+const orm = {
+  selectAll: function(tableInput, cb) {
+    var queryString = "SELECT * FROM " + tableInput + ";";
+    // let queryString = "SELECT * FROM burgers";
+    connection.query(queryString, function(err, result) {
+      if (err) {
+        throw err;
+      }
+      cb(result);
+    });
+  },
+  // vals is an array of values that we want to save to cols
+  // cols are the columns we want to insert the values into
+  insertOne: function(table, cols, vals, cb) {
+    var queryString = "INSERT INTO " + table;
+
+    queryString += " (";
+    queryString += cols.toString();
+    queryString += ") ";
+    queryString += "VALUES (";
+    queryString += printQuestionMarks(vals.length);
+    queryString += ") ";
+
+    console.log(queryString);
+
+    connection.query(queryString, vals, function(err, result) {
+      if (err) {
+        throw err;
+      }
+      cb(result);
+    });
+  },
+  // objColVals would be the columns and values that you want to update
+  // an example of objColVals would be {name: panther, sleepy: true}
+  updateOne: function(table, objColVals, condition, cb) {
+    var queryString = "UPDATE " + table;
+
+    queryString += " SET ";
+    queryString += objToSql(objColVals);
+    queryString += " WHERE ";
+    queryString += condition;
+
+    console.log(queryString);
+    connection.query(queryString, function(err, result) {
+      if (err) {
+        throw err;
+      }
+      cb(result);
+    });
+  }
+};
 
 module.exports = orm;

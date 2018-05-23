@@ -13,11 +13,20 @@ router.get("/", function(req, res){
     });
 });
 
+router.get("/api/burgers", function(req, res){
+
+    burger.getAll(function(data){
+        res.json(data);
+    });
+});
+
+
 
 router.post("/api/burgers", function(req, res){
     
-    burger.add(req.body.name, function(data){
-        res.json({id: data.insertId});
+    burger.create(["burger_name", "devoured"], [req.body.burger_name, req.body.devoured], function(data){
+        // res.json({id: data.insertId});
+        res.redirect("/");
     });
 });
 
@@ -25,9 +34,12 @@ router.post("/api/burgers", function(req, res){
 router.put("/api/burgers/:id", function(req, res){
 
     burger.update(req.params.id, function(data){
+        console.log(data);
         res.redirect("/");
     })
 });
+
+
 
 
 
