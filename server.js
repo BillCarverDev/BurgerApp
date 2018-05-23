@@ -28,3 +28,13 @@ app.listen(PORT, function() {
   // Log (server-side) when our server has started
   console.log("Server listening on: " + PORT);
 });
+
+// Each bug you pursue is a lengthy lesson that adds to your arsenal of understanding.
+
+
+// Issues: //
+// Devoured burgers hold onto their ID; need to add logic to reorder them or remove them from the page
+
+// Resolved Issues: //
+// Fixed routing
+// Corrected array parameters to the burgers.create function in controller
