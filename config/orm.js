@@ -25,9 +25,8 @@ function objToSql(ob) {
 }
 
 const orm = {
-  selectAll: function(tableInput, cb) {
-    var queryString = "SELECT * FROM " + tableInput + ";";
-    // let queryString = "SELECT * FROM burgers";
+  selectAll: function(tableInput, cb) {    
+    let queryString = "SELECT * FROM burgers";
     connection.query(queryString, function(err, result) {
       if (err) {
         throw err;
@@ -38,14 +37,15 @@ const orm = {
   // vals is an array of values that we want to save to cols
   // cols are the columns we want to insert the values into
   insertOne: function(table, cols, vals, cb) {
-    var queryString = "INSERT INTO " + table;
+    let queryString = "INSERT INTO burgers(burger_name) VALUES (?)";
+    // var queryString = "INSERT INTO " + table;
 
-    queryString += " (";
-    queryString += cols.toString();
-    queryString += ") ";
-    queryString += "VALUES (";
-    queryString += printQuestionMarks(vals.length);
-    queryString += ") ";
+    // queryString += " (";
+    // queryString += cols.toString();
+    // queryString += ") ";
+    // queryString += "VALUES (";
+    // queryString += printQuestionMarks(vals.length);
+    // queryString += ") ";
 
     console.log(queryString);
 
